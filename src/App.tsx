@@ -8,12 +8,7 @@ import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { Toaster } from "react-hot-toast";
-
-interface Image {
-  id: string;
-  webformatURL: string;
-  largeImageURL: string;
-}
+import { Image } from "./types";
 
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>("");
