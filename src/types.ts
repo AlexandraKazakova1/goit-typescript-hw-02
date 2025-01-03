@@ -4,7 +4,6 @@ export interface Image {
     regular: string;
     small: string;
     full: string;
-    [key: string]: string;
   };
   alt_description: string;
 }

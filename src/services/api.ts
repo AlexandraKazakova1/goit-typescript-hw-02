@@ -1,11 +1,5 @@
 import axios from "axios";
-
-interface Image {
-  id: string;
-  webformatURL: string;
-  largeImageURL: string;
-}
-
+import { Image } from "../types";
 interface FetchArticlesResponse {
   results: Image[];
   total_pages: number;

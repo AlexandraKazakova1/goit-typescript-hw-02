@@ -26,7 +26,7 @@ const App: React.FC = () => {
       setError(null);
       try {
         const { results, total_pages } = await fetchArticles(query, page);
-        setImages((prevImages) => [...prevImages, ...results]);
+        setImages((prevImages) => [...prevImages, ...(results as Image[])]); // Явно вказуємо тип для results
         setTotalPages(total_pages);
       } catch {
         setError("Error fetching images.");
