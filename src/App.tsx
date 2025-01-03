@@ -9,15 +9,20 @@ import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { Toaster } from "react-hot-toast";
 
-const App = () => {
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [largeImage, setLargeImage] = useState(null);
-  const [totalPages, setTotalPages] = useState(0);
+interface Image {
+  id: string;
+  webformatURL: string;
+  largeImageURL: string;
+}
+
+const App: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [images, setImages] = useState<Image[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [modalData, setModalData] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   useEffect(() => {
     if (!query) return;
@@ -27,9 +32,8 @@ const App = () => {
       try {
         const { results, total_pages } = await fetchArticles(query, page);
         setImages((prevImages) => [...prevImages, ...results]);
-
         setTotalPages(total_pages);
-      } catch (error) {
+      } catch {
         setError("Error fetching images.");
       } finally {
         setIsLoading(false);
@@ -38,7 +42,7 @@ const App = () => {
     loadImages();
   }, [query, page]);
 
-  const searchSubmit = (newQuery) => {
+  const searchSubmit = (newQuery: string) => {
     if (query !== newQuery) {
       setQuery(newQuery);
       setPage(1);
@@ -50,14 +54,12 @@ const App = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const handleImageClick = (largeImageURL) => {
-    setLargeImage(largeImageURL);
-    setShowModal(true);
+  const handleImageClick = (largeImageURL: string) => {
+    setModalData(largeImageURL);
   };
 
   const closeModal = () => {
-    setShowModal(false);
-    setLargeImage(null);
+    setModalData(null);
   };
 
   return (
@@ -70,12 +72,13 @@ const App = () => {
       {page < totalPages && !isLoading && (
         <LoadMoreBtn onClick={handleLoadMore} />
       )}
-
-      <ImageModal
-        imageUrl={largeImage}
-        onClose={closeModal}
-        isOpen={showModal}
-      />
+      {modalData && (
+        <ImageModal
+          imageUrl={modalData}
+          onClose={closeModal}
+          isOpen={!!modalData}
+        />
+      )}
     </div>
   );
 };
